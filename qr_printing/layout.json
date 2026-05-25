@@ -1,0 +1,24 @@
+{
+  "_comment": "File này dùng để tự căn chỉnh ảnh QR trước khi in. Sửa xong cần tạo lại registration_qr.png mới hoặc tạo registration mới để thấy thay đổi.",
+  "_comment_canvas": "canvas = khổ giấy/khổ ảnh cuối cùng. width_mm tăng thì tem rộng hơn, height_mm tăng thì tem cao hơn, dpi tăng thì ảnh nét hơn nhưng file lớn hơn.",
+  "canvas": {
+    "width_mm": 78.0,
+    "height_mm": 52.0,
+    "dpi": 203,
+    "background": "white"
+  },
+  "_comment_qr": "qr = vị trí và kích thước mã QR bên trong tem. size_mm tăng thì QR to hơn, giảm thì QR nhỏ hơn. offset_x_mm > 0 dịch QR sang phải, < 0 dịch sang trái. offset_y_mm > 0 dịch xuống dưới, < 0 dịch lên trên.",
+  "_comment_examples": [
+    "Muốn QR to hơn: tăng qr.size_mm từ 34.0 lên 36.0 hoặc 38.0",
+    "Muốn QR nhỏ hơn: giảm qr.size_mm từ 34.0 xuống 30.0 hoặc 28.0",
+    "Muốn QR sang phải: tăng qr.offset_x_mm, ví dụ 0.0 -> 1.5",
+    "Muốn QR sang trái: giảm qr.offset_x_mm, ví dụ 0.0 -> -1.5",
+    "Muốn QR xuống dưới: tăng qr.offset_y_mm, ví dụ 0.0 -> 1.0",
+    "Muốn QR lên trên: giảm qr.offset_y_mm, ví dụ 0.0 -> -1.0"
+  ],
+  "qr": {
+    "size_mm": 52.8,
+    "offset_x_mm": 0.0,
+    "offset_y_mm": 0.0
+  }
+}

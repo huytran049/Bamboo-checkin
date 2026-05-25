@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <title>Biên bản review dự án Bamboo Kiosk</title>
+  <style>
+    body {
+      font-family: "Times New Roman", serif;
+      font-size: 13pt;
+      line-height: 1.45;
+      margin: 25mm 20mm;
+      color: #111;
+    }
+    h1, h2, h3 {
+      margin-top: 0.7em;
+      margin-bottom: 0.35em;
+    }
+    h1 {
+      text-align: center;
+      font-size: 17pt;
+      text-transform: uppercase;
+    }
+    h2 { font-size: 15pt; }
+    h3 { font-size: 13pt; }
+    ul { margin-top: 0.15em; margin-bottom: 0.55em; }
+    li { margin: 0.15em 0; }
+    p.note { margin-top: 1em; }
+  </style>
+</head>
+<body>
+  <h1>Biên Bản Review Dự Án Bamboo Kiosk</h1>
+
+  <h2>1. Thông tin chung</h2>
+  <ul>
+    <li>Tên dự án: Hệ thống lễ tân thông minh Bamboo Kiosk</li>
+    <li>Thời điểm review: 19/04/2026</li>
+    <li>Hình thức review: Rà soát nội bộ</li>
+    <li>Mục đích review:
+      <ul>
+        <li>Tổng hợp mức độ hoàn thành dự án</li>
+        <li>Xác nhận các hạng mục đã triển khai</li>
+        <li>Ghi nhận các tồn tại kỹ thuật còn mở</li>
+        <li>Làm cơ sở cho tài liệu bàn giao và danh sách fix</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>2. Phạm vi review</h2>
+  <ul>
+    <li>Luồng kiosk tiếp đón người dùng</li>
+    <li>Nhận diện hiện diện và điều hướng trạng thái</li>
+    <li>Quét danh thiếp, OCR, điền biểu mẫu</li>
+    <li>Quét CCCD và nhận dạng thông tin cơ bản</li>
+    <li>Chụp ảnh khuôn mặt và nhận diện khách quay lại</li>
+    <li>Lưu hồ sơ đăng ký</li>
+    <li>Sinh và in QR registration</li>
+    <li>Dashboard quản trị</li>
+    <li>Phần hỏi đáp Q&amp;A / RAG</li>
+    <li>Luồng voice và popup hỗ trợ thao tác</li>
+  </ul>
+
+  <h2>3. Đánh giá tổng quát</h2>
+  <ul>
+    <li>Dự án đã hoàn thành phần lõi của hệ thống.</li>
+    <li>Các chức năng chính đã liên kết thành một luồng nghiệp vụ tương đối hoàn chỉnh.</li>
+    <li>Hệ thống đã đạt mức có thể demo, kiểm thử nội bộ và tiếp tục hoàn thiện phục vụ bàn giao.</li>
+    <li>Trọng tâm hiện tại không còn là dựng chức năng từ đầu.</li>
+    <li>Trọng tâm hiện tại là:
+      <ul>
+        <li>ổn định luồng</li>
+        <li>chuẩn hóa tài liệu</li>
+        <li>tối ưu có chọn lọc</li>
+        <li>khóa các quyết định kỹ thuật đã chốt</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>4. Các nhiệm vụ đã hoàn thành</h2>
+
+  <h3>4.1. Nhóm kiosk flow</h3>
+  <ul>
+    <li>Đã xây dựng luồng kiosk cơ bản:
+      <ul>
+        <li>nhận diện có người</li>
+        <li>hướng dẫn thao tác</li>
+        <li>quét thông tin</li>
+        <li>chụp khuôn mặt</li>
+        <li>lưu đăng ký</li>
+        <li>reset phiên mới</li>
+      </ul>
+    </li>
+    <li>Đã hoàn thiện cơ chế chuyển phase chính:
+      <ul>
+        <li><code>IDLE</code></li>
+        <li><code>CARD</code></li>
+        <li><code>FACE</code></li>
+        <li><code>SUBMITTING</code></li>
+        <li><code>REMOVING</code></li>
+      </ul>
+    </li>
+    <li>Đã xử lý nhiều lỗi trạng thái:
+      <ul>
+        <li>reset không đúng lúc</li>
+        <li>timer cũ còn sót</li>
+        <li>popup còn mở nhưng flow đã chuyển</li>
+        <li>khách quay lại làm kẹt luồng face capture</li>
+      </ul>
+    </li>
+    <li>Đã tối ưu cấu trúc <code>mainpy.js</code> theo hướng giảm rủi ro:
+      <ul>
+        <li>tách quản lý timer</li>
+        <li>tách audio controller</li>
+        <li>tách welcome / returning overlay</li>
+        <li>tách OCR polling</li>
+        <li>tách face recognition polling</li>
+        <li>tách presence reaction</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>4.2. Nhóm OCR danh thiếp</h3>
+  <ul>
+    <li>Đã tích hợp OCR danh thiếp vào luồng kiosk.</li>
+    <li>Đã có cơ chế:
+      <ul>
+        <li>chụp ảnh danh thiếp</li>
+        <li>gửi OCR async</li>
+        <li>nhận kết quả</li>
+        <li>điền form tự động</li>
+      </ul>
+    </li>
+    <li>Đã xử lý các lỗi dữ liệu sau OCR:
+      <ul>
+        <li>dữ liệu đúng nhưng form fill sai</li>
+        <li>field bị ghi đè bởi giá trị rỗng</li>
+        <li>merge không ổn định giữa các lượt cập nhật</li>
+      </ul>
+    </li>
+    <li>Đã chuẩn hóa lại hướng lưu:
+      <ul>
+        <li>dữ liệu OCR</li>
+        <li>dữ liệu biểu mẫu</li>
+        <li>dữ liệu SQLite</li>
+        <li>dữ liệu JSON trong thư mục registration</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>4.3. Nhóm CCCD</h3>
+  <ul>
+    <li>Đã triển khai nhận dạng CCCD trong cùng hệ thống kiosk.</li>
+    <li>Đã phân luồng được giữa:
+      <ul>
+        <li>danh thiếp</li>
+        <li>CCCD</li>
+      </ul>
+    </li>
+    <li>Đã có khả năng:
+      <ul>
+        <li>quét QR CCCD</li>
+        <li>đọc thông tin cơ bản</li>
+        <li>lưu draft</li>
+        <li>đẩy dữ liệu lên dashboard</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>4.4. Nhóm khuôn mặt</h3>
+  <ul>
+    <li>Đã tích hợp chụp ảnh khuôn mặt sau bước quét thông tin.</li>
+    <li>Đã có cơ chế face registration cho hồ sơ mới.</li>
+    <li>Đã có cơ chế nhận diện khách quay lại.</li>
+    <li>Đã xử lý các lỗi quan trọng:
+      <ul>
+        <li>nhận diện quay lại xong nhưng auto capture không chạy</li>
+        <li>guide khuôn mặt không chuyển xanh đúng lúc</li>
+        <li>state của returning visitor kéo sang flow face capture</li>
+      </ul>
+    </li>
+    <li>Đã ổn định lại các mốc:
+      <ul>
+        <li>clear recognition hold</li>
+        <li>clear popup chào mừng</li>
+        <li>reset face guide</li>
+        <li>reset auto capture state</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>4.5. Nhóm popup, voice, điều hướng thao tác</h3>
+  <ul>
+    <li>Đã thay popup hỏi đặt lịch cũ bằng popup chọn chức năng.</li>
+    <li>Đã bổ sung các nhánh:
+      <ul>
+        <li>Đặt lịch</li>
+        <li>Hỏi đáp</li>
+        <li>Không</li>
+      </ul>
+    </li>
+    <li>Đã điều chỉnh các logic liên quan:
+      <ul>
+        <li>timeout popup</li>
+        <li>reset sau cảm ơn</li>
+        <li>reset khi khách rút card</li>
+        <li>điều kiện chờ popup đóng rồi mới reset</li>
+      </ul>
+    </li>
+    <li>Đã tạo giao diện Q&amp;A riêng biệt với kiosk chính.</li>
+    <li>Đã giữ được tính tách biệt giữa:
+      <ul>
+        <li>luồng nghiệp vụ kiosk</li>
+        <li>luồng hỏi đáp Q&amp;A</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>4.6. Nhóm Q&amp;A / RAG</h3>
+  <ul>
+    <li>Đã tạo nhánh Q&amp;A riêng để phục vụ giai đoạn AI hỏi đáp.</li>
+    <li>Đã tách dữ liệu RAG vào thư mục riêng.</li>
+    <li>Đã tổ chức lại nguồn dữ liệu theo hướng:
+      <ul>
+        <li>dữ liệu sản phẩm</li>
+        <li>dữ liệu công ty</li>
+        <li>dữ liệu giao tiếp cơ bản</li>
+        <li>dữ liệu FAQ Bamboo</li>
+      </ul>
+    </li>
+    <li>Đã triển khai các thành phần chính:
+      <ul>
+        <li>ingest dữ liệu</li>
+        <li>chunking</li>
+        <li>retrieval</li>
+        <li>route giữa <code>rule / faq / rag / fallback</code></li>
+        <li>lưu lịch sử</li>
+        <li>voice trả lời</li>
+      </ul>
+    </li>
+    <li>Đã xây dựng bộ eval retrieval.</li>
+    <li>Đã chạy kiểm tra theo bộ câu hỏi chuẩn.</li>
+    <li>Đã cải thiện route và source filtering để tăng độ chính xác retrieval.</li>
+    <li>Đã triển khai giao diện Q&amp;A riêng:
+      <ul>
+        <li>hỏi đáp bằng voice</li>
+        <li>hiển thị câu hỏi</li>
+        <li>hiển thị câu trả lời</li>
+        <li>lưu theo phiên hội thoại</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>4.7. Nhóm dashboard</h3>
+  <ul>
+    <li>Đã bổ sung màn hình Q&amp;A trên dashboard.</li>
+    <li>Đã đổi cách lưu lịch sử:
+      <ul>
+        <li>không còn lưu rời từng cặp hỏi đáp</li>
+        <li>chuyển sang lưu theo phiên hội thoại</li>
+      </ul>
+    </li>
+    <li>Đã tối ưu dashboard theo hướng:
+      <ul>
+        <li>lazy load theo màn</li>
+        <li>giảm refresh thừa</li>
+        <li>giảm request nền không cần thiết</li>
+      </ul>
+    </li>
+    <li>Đã thêm các thao tác quản trị:
+      <ul>
+        <li>xem lịch sử</li>
+        <li>tìm kiếm</li>
+        <li>xóa lịch sử chat</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>4.8. Nhóm QR registration và in QR</h3>
+  <ul>
+    <li>Đã tích hợp sinh QR cho từng registration.</li>
+    <li>Đã đổi nội dung QR theo hướng thực dụng hơn:
+      <ul>
+        <li>hiển thị được thông tin thực tế khi quét</li>
+        <li>không chỉ còn mã <code>REG_...</code></li>
+      </ul>
+    </li>
+    <li>Đã xử lý lại luồng in QR:
+      <ul>
+        <li>tách bố cục ảnh QR ra file riêng</li>
+        <li>tách option máy in <code>lp</code> ra file riêng</li>
+        <li>giảm phụ thuộc vào <code>.env</code></li>
+      </ul>
+    </li>
+    <li>Đã chuẩn hóa 2 file cấu hình:
+      <ul>
+        <li><code>qr_printing/layout.json</code></li>
+        <li><code>qr_printing/print_profile.json</code></li>
+      </ul>
+    </li>
+    <li>Đã khóa profile in theo cấu hình thực tế đã test:
+      <ul>
+        <li><code>Custom 78 x 52 mm</code></li>
+        <li><code>Landscape</code></li>
+        <li><code>Scale 254%</code></li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>5. Các kết quả kỹ thuật đáng ghi nhận</h2>
+  <ul>
+    <li>Hệ thống đã vượt mức demo rời rạc.</li>
+    <li>Các module chính đã kết nối được với nhau trong cùng một luồng.</li>
+    <li>Nhiều lỗi phát sinh trong quá trình tích hợp đã được xử lý trực tiếp trên codebase thật.</li>
+    <li>Q&amp;A đã chuyển từ mức thử nghiệm sang mức có kiến trúc rõ hơn.</li>
+    <li>Dashboard đã có vai trò quản trị thực tế thay vì chỉ xem dữ liệu thô.</li>
+    <li>Luồng QR đã rõ ràng hơn cả về quét lại thông tin lẫn in tem.</li>
+  </ul>
+
+  <h2>6. Các tồn tại còn mở</h2>
+  <ul>
+    <li>Voice recognition trên trình duyệt vẫn phụ thuộc trạng thái micro và browser API.</li>
+    <li>Q&amp;A / RAG vẫn cần tiếp tục theo dõi regression khi tối ưu backend.</li>
+    <li>Logic kiosk trung tâm vẫn còn phức tạp, dù đã tách bớt module.</li>
+    <li>Cần thêm một vòng kiểm thử thực tế với đúng thiết bị để khóa hoàn toàn phần in QR.</li>
+    <li>Một số phần đã ở mức ổn định chức năng, nhưng chưa ở mức tối ưu cuối cùng về kiến trúc.</li>
+  </ul>
+
+  <h2>7. Kết luận review</h2>
+  <ul>
+    <li>Dự án Bamboo Kiosk đã hoàn thành phần nền tảng cốt lõi.</li>
+    <li>Các chức năng chính đã có thể vận hành liên thông.</li>
+    <li>Dự án đủ điều kiện chuyển sang giai đoạn:
+      <ul>
+        <li>tổng hợp tài liệu</li>
+        <li>chốt danh sách fix</li>
+        <li>chốt các quyết định kỹ thuật</li>
+        <li>kiểm thử và bàn giao theo phạm vi</li>
+      </ul>
+    </li>
+    <li>Nhận định chung:
+      <ul>
+        <li>Dự án đã hoàn thành cơ bản.</li>
+        <li>Phần còn lại chủ yếu là hoàn thiện, chuẩn hóa và khóa rủi ro.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>8. Kiến nghị sau review</h2>
+  <ul>
+    <li>Hoàn thiện biên bản review chính thức.</li>
+    <li>Hoàn thiện danh sách fix và các hướng kỹ thuật đã chốt.</li>
+    <li>Kiểm thử lại các flow kiosk trọng yếu theo checklist.</li>
+    <li>Kiểm tra lại nhánh Q&amp;A sau mỗi thay đổi tối ưu.</li>
+    <li>Chốt cấu hình in QR trên thiết bị thật.</li>
+  </ul>
+
+  <p class="note"><strong>Ghi chú:</strong> Biên bản này là bản tổng hợp review nội bộ, phục vụ báo cáo tiến độ và chuẩn bị tài liệu bàn giao.</p>
+</body>
+</html>

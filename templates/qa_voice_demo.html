@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Q&A Voice</title>
+  <link rel="stylesheet" href="/static/css/qa_voice_demo.css" />
+  <script src="/static/js/i18n.js?v=3"></script>
+  <script defer src="/static/js/qa_voice_demo.js?v=3"></script>
+</head>
+
+<body>
+  <main class="qa-page">
+    <section class="qa-card">
+      <div class="qa-topbar">
+        <div class="qa-heading">
+          <h1 data-i18n="qa.title">Hỏi đáp bằng giọng nói</h1>
+          <p class="qa-subtitle" data-i18n="qa.subtitle">Đang sẵn sàng nghe câu hỏi</p>
+        </div>
+        <div class="lang-switcher lang-switcher-qa" data-lang-switcher role="group" aria-label="Chon ngon ngu">
+          <button type="button" class="lang-flag-btn lang-flag-btn-vi" data-lang-value="vi" data-i18n="lang.vi" data-i18n-attr="aria-label,title" aria-label="Tiếng Việt" title="Tiếng Việt">
+            <span class="lang-flag" aria-hidden="true">🇻🇳</span>
+            <span class="lang-code">VI</span>
+          </button>
+          <button type="button" class="lang-flag-btn lang-flag-btn-ja" data-lang-value="ja" data-i18n="lang.ja" data-i18n-attr="aria-label,title" aria-label="Tiếng Nhật" title="Tiếng Nhật">
+            <span class="lang-code">JP</span>
+            <span class="lang-flag" aria-hidden="true">🇯🇵</span>
+          </button>
+          <span class="lang-toggle-indicator" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div id="qaStatusRow" class="qa-status-row qa-status-idle">
+        <span class="qa-status-label" data-i18n="qa.status.label">Trạng thái</span>
+        <strong id="qaStatusText" data-i18n="qa.status.ready">Đang chuẩn bị mic</strong>
+      </div>
+
+      <section class="qa-chat-shell" aria-label="Lịch sử hỏi đáp" data-i18n="qa.history.aria" data-i18n-attr="aria-label">
+        <div id="qaConversationGrid" class="qa-chat-stream">
+          <div class="qa-conversation-empty qa-placeholder" data-i18n="qa.empty">Chưa có hội thoại nào.</div>
+        </div>
+      </section>
+    </section>
+  </main>
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.venv_lora/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Runtime data
+logs/
+.run/
+registrations/
+reports/
+*.log
+
+# Local databases
+database/*.db
+database/*.db-*
+*.sqlite
+*.sqlite3
+
+# AI/model artifacts
+models/
+*.onnx
+*.pt
+*.pth
+*.gguf
+*.engine
+*.tflite
+
+# RAG/vector indexes and generated cache
+rag/indexes/
+rag/chroma/
+chroma/
+chroma_db/
+*.chroma/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+
+# Build/package outputs
+dist/
+build/
+*.spec
+
+# Node/browser dependency folders if added later
+node_modules/
+
+# Vendored third-party source trees not used directly by the app runtime
+static/js/vendor/tesseract/
+static/js/vendor/nimq/qr-scanner-master/
+static/js/vendor/nimq/qr-scanner-master.zip
+static/js/vendor/nimq/*.map
+static/js/vendor/nimq/src/
+static/js/vendor/nimq/demo/
+static/js/vendor/nimq/types/
+static/js/vendor/nimq/package.json
+static/js/vendor/nimq/yarn.lock
+static/js/vendor/nimq/rollup.config.js
+static/js/vendor/nimq/tsconfig.json

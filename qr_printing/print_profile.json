@@ -1,0 +1,15 @@
+{
+  "_comment": "File này điều khiển option lp/lpr của luồng in tự động. Sửa ở đây thay vì phụ thuộc .env hay hộp thoại Cmd/Win + P.",
+  "_comment_page_size": "Khớp với khổ bạn đang in tay ổn nhất: 78x52mm, landscape, scaling 254%.",
+  "_comment_scaling": "scaling = 254 nghĩa là phóng to 254% theo driver, tương ứng với cách bạn đang set trong hộp thoại in.",
+  "_comment_extra_options": "extra_options là các option driver-specific, viết giống -o KEY=VALUE cách nhau bằng dấu cách.",
+  "printer_name": "Xprinter_XP_350BM_2",
+  "copies": 1,
+  "page_size": "Custom.78x52mm",
+  "media": "Custom.78x52mm",
+  "fit_to_page": true,
+  "landscape": true,
+  "scaling": 254,
+  "extra_options": "PaperType=LabelGaps PostAction=TearOff Darkness=7 AdjustHoriaontal=0 AdjustVertical=0",
+  "command": "lp"
+}

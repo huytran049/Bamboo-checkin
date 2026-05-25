@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="appointment-overlay-enabled" content="{{ 'true' if appointment_overlay_enabled else 'false' }}" />
+  <title>SAOMAISOFT</title>
+
+  <link rel="stylesheet" href="/static/css/styles.css?v=6" />
+
+  <!-- Offline vendor libs -->
+  <script src="/static/js/vendor/nimq/qr-scanner.legacy.min.js"></script>
+  <script src="/static/js/i18n.js?v=4"></script>
+  <script defer src="/static/js/kiosk_timers.js?v=1"></script>
+  <script defer src="/static/js/kiosk_welcome.js?v=2"></script>
+  <script defer src="/static/js/kiosk_audio.js?v=2"></script>
+  <script defer src="/static/js/kiosk_async.js?v=1"></script>
+  <script defer src="/static/js/kiosk_presence.js?v=1"></script>
+  <!-- App -->
+  <script defer src="/static/js/mainpy.js?v=19"></script>
+  <script>
+    const appointmentOverlayMeta = document.querySelector('meta[name="appointment-overlay-enabled"]');
+    window.KIOSK_CONFIG = {
+      appointmentOverlayEnabled: appointmentOverlayMeta?.content === "true"
+    };
+    // Fetch ngôn ngữ và apply ngay khi DOM sẵn sàng
+    document.addEventListener("DOMContentLoaded", () => {
+      window.I18N.fetchAndApply();
+    });
+  </script>
+</head>
+
+<body>
+  <div id="returning-visitor-overlay" class="returning-visitor-overlay is-hidden" aria-hidden="true">
+    <div class="returning-card">
+      <h2 id="returning-visitor-title" data-i18n="welcome.returning">Chào mừng quay lại</h2>
+      <p id="returning-visitor-name" class="returning-name"></p>
+    </div>
+  </div>
+
+  <div id="welcome-eyes-overlay" class="welcome-eyes-overlay mood-neutral" aria-hidden="true">
+    <div class="welcome-copy">
+      <h1 data-i18n="welcome.guest">Chào mừng quý khách</h1>
+    </div>
+    <div class="welcome-face" role="img" aria-label="Avatar AIDISAN">
+      <div class="welcome-brow left" aria-hidden="true"></div>
+      <div class="welcome-brow right" aria-hidden="true"></div>
+      <div class="welcome-eye left">
+        <span class="welcome-pupil"></span>
+      </div>
+      <div class="welcome-eye right">
+        <span class="welcome-pupil"></span>
+      </div>
+      <div class="welcome-mouth">
+        <div class="line"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="appointment-prompt-overlay" class="appointment-overlay is-hidden" aria-hidden="true">
+    <div class="appointment-dialog appointment-dialog-sm" role="dialog" aria-modal="true"
+      aria-labelledby="appointmentPromptTitle">
+      <p class="appointment-kicker" data-i18n="appt.kicker">Chức năng</p>
+      <h2 id="appointmentPromptTitle" data-i18n="appt.prompt.title">Vui lòng chọn chức năng :</h2>
+      <div class="appointment-actions">
+        <button id="appointmentPromptYesBtn" type="button" class="appointment-btn appointment-btn-primary" data-i18n="btn.appointment">Đặt lịch</button>
+        <button id="appointmentPromptQABtn" type="button" class="appointment-btn appointment-btn-info" data-i18n="btn.qa">Hỏi đáp</button>
+        <button id="appointmentPromptNoBtn" type="button" class="appointment-btn appointment-btn-danger" data-i18n="btn.no">Không</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="appointment-form-overlay" class="appointment-overlay is-hidden" aria-hidden="true">
+    <div class="appointment-dialog" role="dialog" aria-modal="true" aria-labelledby="appointmentFormTitle">
+      <div class="appointment-dialog-head">
+        <p id="appointmentFormTitle" class="appointment-kicker appointment-kicker-solid" data-i18n="appt.form.title">Đặt lịch hẹn</p>
+        <div id="appointmentFormStatus" class="appointment-inline-status" hidden></div>
+      </div>
+
+      <div class="appointment-grid">
+        <div class="appointment-time-column">
+          <label class="appointment-field">
+            <span data-i18n="appt.date">Ngày hẹn</span>
+            <input id="appointmentDateInput" type="date" />
+          </label>
+          <label class="appointment-field">
+            <span data-i18n="appt.start">Giờ bắt đầu</span>
+            <select id="appointmentStartTimeSelect" class="appointment-time-select" size="1">
+              <option value="" data-i18n="appt.select.start">Chọn giờ bắt đầu</option>
+            </select>
+          </label>
+          <label class="appointment-field">
+            <span data-i18n="appt.end">Giờ kết thúc</span>
+            <select id="appointmentEndTimeSelect" class="appointment-time-select" size="1">
+              <option value="" data-i18n="appt.select.end">Chọn giờ kết thúc</option>
+            </select>
+          </label>
+        </div>
+        <div class="appointment-field appointment-schedule-column">
+          <span data-i18n="appt.schedule">Lịch trong ngày</span>
+          <div id="appointmentDaySchedule" class="appointment-day-schedule">
+            <div id="appointmentDayScheduleEmpty" class="appointment-day-empty" data-i18n="appt.schedule.empty">Chưa có lịch hẹn</div>
+            <div id="appointmentDayScheduleList" class="appointment-day-list"></div>
+          </div>
+        </div>
+        <div class="appointment-field appointment-notes-field">
+          <div class="appointment-notes-shell">
+            <button id="appointmentMicBtn" type="button" class="appointment-mic-btn"
+              data-i18n="appt.mic.label" data-i18n-attr="aria-label" aria-label="Ghi âm mục đích hẹn">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 15a3 3 0 0 0 3-3V7a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Z" fill="currentColor" />
+                <path d="M18 11a1 1 0 1 0-2 0 4 4 0 1 1-8 0 1 1 0 1 0-2 0 6 6 0 0 0 5 5.91V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-3.09A6 6 0 0 0 18 11Z" fill="currentColor" />
+              </svg>
+            </button>
+            <div class="appointment-purpose-overlay">
+              <select id="appointmentPurposeSelect">
+                <option value="" data-i18n="appt.purpose.default">Mục đích</option>
+                <option value="Chi tiết về Bamboo" data-i18n="appt.purpose.bamboo">Chi tiết về Bamboo</option>
+                <option value="Gặp giám đốc" data-i18n="appt.purpose.director">Gặp giám đốc</option>
+                <option value="Demo Bamboo" data-i18n="appt.purpose.demo">Demo Bamboo</option>
+              </select>
+            </div>
+            <textarea id="appointmentNoteTextarea" rows="6"
+              data-i18n="appt.note.placeholder" data-i18n-attr="placeholder,aria-label"
+              aria-label="Nội dung lịch hẹn"
+              placeholder="Nhập hoặc giữ nút mic để nói nội dung lịch hẹn..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="appointment-actions">
+        <button id="appointmentSubmitBtn" type="button" class="appointment-btn appointment-btn-primary" data-i18n="btn.appointment">Đặt lịch</button>
+        <button id="appointmentCancelBtn" type="button" class="appointment-btn appointment-btn-secondary" data-i18n="btn.cancel">Huỷ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="appointment-confirm-overlay" class="appointment-overlay is-hidden" aria-hidden="true">
+    <div class="appointment-dialog appointment-dialog-sm" role="dialog" aria-modal="true"
+      aria-labelledby="appointmentConfirmTitle">
+      <h2 id="appointmentConfirmTitle" data-i18n="appt.confirm.title">Xác nhận đặt lịch hẹn</h2>
+      <p id="appointmentConfirmMessage" class="appointment-confirm-copy" hidden></p>
+      <div class="appointment-actions">
+        <button id="appointmentConfirmYesBtn" type="button" class="appointment-btn appointment-btn-primary" data-i18n="btn.confirm">Xác nhận</button>
+        <button id="appointmentConfirmNoBtn" type="button" class="appointment-btn appointment-btn-secondary" data-i18n="btn.close">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="appointment-notice-overlay" class="appointment-overlay is-hidden" aria-hidden="true">
+    <div class="appointment-dialog appointment-dialog-sm" role="dialog" aria-modal="true"
+      aria-labelledby="appointmentNoticeTitle">
+      <p class="appointment-kicker" data-i18n="appt.notice.kicker">Thông báo</p>
+      <h2 id="appointmentNoticeTitle" class="appointment-notice-title" data-i18n="appt.notice.title">Thông báo</h2>
+      <p id="appointmentNoticeMessage" class="appointment-confirm-copy" data-i18n="appt.notice.body.default">Nội dung</p>
+      <div class="appointment-actions">
+        <button id="appointmentNoticeCloseBtn" type="button" class="appointment-btn appointment-btn-primary" data-i18n="btn.close">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="grid-12">
+    <!-- Cột trái: 2 khối camera -->
+    <section class="panel col-5 cameras">
+      <!-- Camera danh thiếp -->
+      <div class="camera-block">
+        <div class="block-header row-one">
+          <div class="block-title">
+            <span class="block-kicker" data-i18n="step.label.1">Bước 1</span>
+            <h2 data-i18n="camera.card">Danh thiếp</h2>
+          </div>
+          <span class="label-inline" aria-hidden="true"></span>
+          <select id="cam1-select"
+            data-i18n="camera.select.card" data-i18n-attr="aria-label"
+            aria-label="Chọn camera danh thiếp"></select>
+        </div>
+
+        <div class="video-wrap">
+          <video id="video1" autoplay playsinline></video>
+          <canvas id="card-bbox-canvas" class="overlay" style="pointer-events:none;"></canvas>
+          <div id="cam1-paused" class="badge-paused" hidden data-i18n="badge.scan.locked">Quét đang bị khóa</div>
+          <div class="ocr-status" style="display: none;">
+            <span data-i18n="camera.ocr.confidence">Độ tin cậy OCR:</span> <span id="bcard-ocr-score">0%</span>
+          </div>
+          <button id="cam1-power" class="power-btn" title="Nguồn camera 1" aria-label="Nguồn camera 1" data-i18n="camera.power.1" data-i18n-attr="title,aria-label">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path d="M12 3 v7" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" />
+              <path d="M7.5 6.5 a7 7 0 1 0 9 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Camera khuôn mặt / QR -->
+      <div class="camera-block">
+        <div class="block-header row-one">
+          <div class="block-title">
+            <span class="block-kicker" data-i18n="step.label.2">Bước 2</span>
+            <h2 data-i18n="camera.face">Khuôn mặt / QR</h2>
+          </div>
+          <span class="label-inline" aria-hidden="true"></span>
+          <select id="cam2-select"
+            data-i18n="camera.select.face" data-i18n-attr="aria-label"
+            aria-label="Chọn camera khuôn mặt và QR"></select>
+        </div>
+
+        <div class="video-wrap">
+          <video id="video2" autoplay playsinline></video>
+          <div id="scan-overlay" class="overlay"></div>
+          <div id="face-guide-overlay" class="overlay face-guide-overlay" aria-hidden="true">
+            <div class="face-guide-oval"></div>
+            <div class="face-guide-copy">
+              <span data-i18n="face.guide">Vui lòng đưa khuôn mặt vào trong khung nhận diện</span>
+            </div>
+          </div>
+          <canvas id="canvas2" class="overlay"></canvas>
+          <div id="cam2-paused" class="badge-paused" hidden data-i18n="badge.qr.locked">Quét mã QR đang bị khóa</div>
+          <div id="face-processing-badge" class="badge-paused face-processing-badge" hidden data-i18n="badge.face.processing">Đang xử lý ảnh khuôn mặt...</div>
+          <div id="presence" class="presence muted small" style="display: none;" data-i18n="presence.searching">Đang tìm người...</div>
+          <button id="cam2-power" class="power-btn" title="Nguồn camera 2" aria-label="Nguồn camera 2" data-i18n="camera.power.2" data-i18n-attr="title,aria-label">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path d="M12 3 v7" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" />
+              <path d="M7.5 6.5 a7 7 0 1 0 9 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cột giữa: ảnh + biểu mẫu -->
+    <section class="panel col-5 right-pane">
+      <div class="ketqua two-up">
+        <div class="preview-card qr-card">
+          <div class="preview-meta">
+            <strong data-i18n="preview.card">Ảnh danh thiếp đã chụp</strong>
+          </div>
+          <div class="preview-frame">
+            <img id="bcard-preview" alt="Ảnh danh thiếp đã chụp" data-i18n="preview.card.alt" data-i18n-attr="alt" />
+            <p class="preview-empty" data-i18n="preview.empty.card">Chưa có ảnh danh thiếp</p>
+          </div>
+        </div>
+        <div class="preview-card face-card">
+          <div class="preview-meta">
+            <strong data-i18n="preview.face">Ảnh khuôn mặt đã chụp</strong>
+          </div>
+          <div class="preview-frame">
+            <img id="face-preview" alt="Ảnh khuôn mặt đã chụp" data-i18n="preview.face.alt" data-i18n-attr="alt" />
+            <p class="preview-empty" data-i18n="preview.empty.face">Chưa có ảnh khuôn mặt</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel col-2 side-actions-pane">
+      <div class="side-actions-stack">
+        <div class="side-language-toggle" role="group" aria-label="Chon ngon ngu">
+          <button type="button" class="side-language-option side-language-option-vi" data-lang-value="vi"
+            data-i18n="lang.vi" data-i18n-attr="aria-label,title" aria-label="Tiếng Việt" title="Tiếng Việt">
+            <span class="side-language-flag" aria-hidden="true">🇻🇳</span>
+            <span class="side-language-code">VI</span>
+          </button>
+          <button type="button" class="side-language-option side-language-option-ja" data-lang-value="ja"
+            data-i18n="lang.ja" data-i18n-attr="aria-label,title" aria-label="Tiếng Nhật" title="Tiếng Nhật">
+            <span class="side-language-code">JP</span>
+            <span class="side-language-flag" aria-hidden="true">🇯🇵</span>
+          </button>
+          <span class="side-language-indicator" aria-hidden="true"></span>
+        </div>
+        <div class="step-rail side-step-rail" aria-hidden="true">
+          <div class="step-chip is-active" id="step-chip-card">
+            <span class="step-num">01</span>
+            <span class="step-label" data-i18n="step.card">Chụp danh thiếp / QR</span>
+          </div>
+          <div class="step-chip" id="step-chip-face">
+            <span class="step-num">02</span>
+            <span class="step-label" data-i18n="step.face">Chụp khuôn mặt</span>
+          </div>
+          <div class="step-chip" id="step-chip-complete">
+            <span class="step-num">03</span>
+            <span class="step-label" data-i18n="step.done">Hoàn tất</span>
+          </div>
+        </div>
+        <div class="side-action-group">
+          <button id="sideAppointmentBtn" type="button" class="side-action-btn side-action-btn-primary">
+            <span class="side-action-label" data-i18n="btn.appointment">Đặt lịch</span>
+          </button>
+          <button id="sideQaBtn" type="button" class="side-action-btn side-action-btn-info">
+            <span class="side-action-label" data-i18n="btn.qa">Hỏi đáp</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Khu vực in (ẩn) -->
+  <div id="print-area">
+    <h2 data-i18n="print.title">Đăng ký QR</h2>
+    <div id="qr-print"></div>
+  </div>
+</body>
+
+</html>

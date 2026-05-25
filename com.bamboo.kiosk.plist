@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.bamboo.kiosk</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/ssg/Documents/bamboo_nissin/scripts/kiosk_startup.sh</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>WorkingDirectory</key>
+    <string>/Users/ssg/Documents/bamboo_nissin</string>
+    <key>StandardOutPath</key>
+    <string>/tmp/bamboo_kiosk_stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/bamboo_kiosk_stderr.log</string>
+    <key>KeepAlive</key>
+    <false/>
+</dict>
+</plist>

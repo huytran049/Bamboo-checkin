@@ -1,0 +1,322 @@
+[
+  {
+    "id": "rule_001",
+    "question": "Kiosk hiện hỗ trợ những chức năng chính nào?",
+    "expected_route": "rule",
+    "expected_modes": ["rule"],
+    "expected_source_any": ["10_4.md", "19.md", "20.md", "21.md", "22.md"],
+    "should_fallback": false
+  },
+  {
+    "id": "rule_002",
+    "question": "Bamboo có chụp khuôn mặt không?",
+    "expected_route": "rule",
+    "expected_modes": ["rule"],
+    "expected_source_any": ["9_4.md", "10_4.md", "21.md"],
+    "should_fallback": false
+  },
+  {
+    "id": "rule_003",
+    "question": "Quy trình đăng ký cơ bản của kiosk là gì?",
+    "expected_route": "rule",
+    "expected_modes": ["rule"],
+    "expected_source_any": ["10_4.md", "19.md"],
+    "should_fallback": false
+  },
+  {
+    "id": "rule_004",
+    "question": "Dashboard hiện có những phân hệ nào?",
+    "expected_route": "rule",
+    "expected_modes": ["rule"],
+    "expected_source_any": ["20.md", "21.md", "22.md", "12_4.md"],
+    "should_fallback": false
+  },
+  {
+    "id": "rule_005",
+    "question": "Chức năng đặt lịch có giới hạn giờ như thế nào?",
+    "expected_route": "rule",
+    "expected_modes": ["rule"],
+    "expected_source_any": ["19.md", "20.md"],
+    "should_fallback": false
+  },
+  {
+    "id": "rule_006",
+    "question": "Hệ thống có nhận diện khách quay lại không?",
+    "expected_route": "rule",
+    "expected_modes": ["rule"],
+    "expected_source_any": ["10_4.md", "21.md"],
+    "should_fallback": false
+  },
+  {
+    "id": "faq_001",
+    "question": "Bạn là ai?",
+    "expected_route": "faq",
+    "expected_modes": ["faq", "faq_extractive"],
+    "expected_source_any": ["giao_tiep_co_ban.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "faq_002",
+    "question": "Xin chào",
+    "expected_route": "faq",
+    "expected_modes": ["faq", "faq_extractive"],
+    "expected_source_any": ["giao_tiep_co_ban.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "faq_003",
+    "question": "Bạn làm được gì?",
+    "expected_route": "faq",
+    "expected_modes": ["faq", "faq_extractive"],
+    "expected_source_any": ["giao_tiep_co_ban.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "faq_004",
+    "question": "Tôi đang bối rối",
+    "expected_route": "faq",
+    "expected_modes": ["faq", "faq_extractive"],
+    "expected_source_any": ["giao_tiep_co_ban.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "faq_005",
+    "question": "Bamboo có những chức năng chính nào?",
+    "expected_route": "rule",
+    "expected_modes": ["rule"],
+    "expected_source_any": ["10_4.md", "19.md", "20.md", "21.md", "22.md"],
+    "should_fallback": false
+  },
+  {
+    "id": "faq_006",
+    "question": "Bamboo có hỗ trợ OCR không?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["bamboo_faq.txt", "bamboo.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "faq_007",
+    "question": "Bamboo có dashboard không?",
+    "expected_route": "rule",
+    "expected_modes": ["rule"],
+    "expected_source_any": ["20.md", "21.md", "22.md", "12_4.md"],
+    "should_fallback": false
+  },
+  {
+    "id": "faq_008",
+    "question": "Bamboo có dùng RAG không?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["bamboo_faq.txt", "bamboo.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_001",
+    "question": "Sao Mai Solution Group được thành lập năm nào?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["RAG_saomai1.txt", "RAG_saomai2.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_002",
+    "question": "SSG có bao nhiêu nhân sự và đã triển khai bao nhiêu dự án?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["RAG_saomai1.txt", "RAG_saomai2.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_003",
+    "question": "SSG cung cấp những dịch vụ chính nào?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["RAG_saomai1.txt", "RAG_saomai2.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_004",
+    "question": "EcoSave giúp tiết kiệm điện như thế nào?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["ECOSAVE.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_005",
+    "question": "EcoSave áp dụng cho hệ thống nào?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["ECOSAVE.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_006",
+    "question": "Smart Box dùng để làm gì trong nhà máy?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["Smart_box.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_007",
+    "question": "Smart Box có thể thu thập những loại dữ liệu nào?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["Smart_box.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_008",
+    "question": "Camera AI của SSG có thể ứng dụng vào đâu?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["camera_AI.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_009",
+    "question": "Camera AI có thể dùng để kiểm tra ngoại quan không?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["camera_AI.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_010",
+    "question": "Inspection Machine có thể kiểm tra những gì?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["inspection_machine.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_011",
+    "question": "Inspection Machine có thể kiểm tra kích thước chi tiết cơ khí không?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["inspection_machine.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_012",
+    "question": "Bamboo dùng để làm gì?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["bamboo_faq.txt", "bamboo.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_013",
+    "question": "Bamboo lưu dữ liệu đăng ký ở đâu?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["bamboo_faq.txt", "bamboo.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_014",
+    "question": "Dữ liệu Q&A được nạp như thế nào?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["bamboo_faq.txt", "bamboo.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_015",
+    "question": "Bamboo phù hợp cho môi trường nào?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["bamboo_faq.txt", "bamboo.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "rag_016",
+    "question": "Bamboo mang lại lợi ích gì?",
+    "expected_route": "rag",
+    "expected_modes": ["rag", "extractive"],
+    "expected_source_any": ["bamboo_faq.txt", "bamboo.txt"],
+    "should_fallback": false
+  },
+  {
+    "id": "dynamic_001",
+    "question": "Hôm nay tôi có lịch hẹn nào không?",
+    "expected_route": "dynamic_reserved",
+    "expected_modes": ["dynamic_reserved"],
+    "expected_source_any": [],
+    "should_fallback": true
+  },
+  {
+    "id": "dynamic_002",
+    "question": "Ai phụ trách cuộc hẹn của tôi?",
+    "expected_route": "dynamic_reserved",
+    "expected_modes": ["dynamic_reserved"],
+    "expected_source_any": [],
+    "should_fallback": true
+  },
+  {
+    "id": "dynamic_003",
+    "question": "Khung giờ trống hôm nay là gì?",
+    "expected_route": "dynamic_reserved",
+    "expected_modes": ["dynamic_reserved"],
+    "expected_source_any": [],
+    "should_fallback": true
+  },
+  {
+    "id": "dynamic_004",
+    "question": "Tôi đã check-in chưa?",
+    "expected_route": "dynamic_reserved",
+    "expected_modes": ["dynamic_reserved"],
+    "expected_source_any": [],
+    "should_fallback": true
+  },
+  {
+    "id": "dynamic_005",
+    "question": "Khách nào vừa đăng ký xong?",
+    "expected_route": "dynamic_reserved",
+    "expected_modes": ["dynamic_reserved"],
+    "expected_source_any": [],
+    "should_fallback": true
+  },
+  {
+    "id": "dynamic_006",
+    "question": "Trạng thái cuộc hẹn của tôi hiện tại là gì?",
+    "expected_route": "dynamic_reserved",
+    "expected_modes": ["dynamic_reserved"],
+    "expected_source_any": [],
+    "should_fallback": true
+  },
+  {
+    "id": "fallback_001",
+    "question": "Hôm nay trời mưa không?",
+    "expected_route": "rag",
+    "expected_modes": ["fallback"],
+    "expected_source_any": [],
+    "should_fallback": true
+  },
+  {
+    "id": "fallback_002",
+    "question": "Giá vàng hôm nay bao nhiêu?",
+    "expected_route": "rag",
+    "expected_modes": ["fallback"],
+    "expected_source_any": [],
+    "should_fallback": true
+  },
+  {
+    "id": "fallback_003",
+    "question": "Thủ đô của Canada là gì?",
+    "expected_route": "rag",
+    "expected_modes": ["fallback"],
+    "expected_source_any": [],
+    "should_fallback": true
+  },
+  {
+    "id": "fallback_004",
+    "question": "Bạn có thể dự đoán kết quả xổ số không?",
+    "expected_route": "rag",
+    "expected_modes": ["fallback"],
+    "expected_source_any": [],
+    "should_fallback": true
+  }
+]

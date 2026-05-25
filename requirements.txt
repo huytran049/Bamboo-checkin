@@ -1,0 +1,17 @@
+flask
+flask_cors
+python-dotenv
+werkzeug
+qrcode
+pillow
+numpy
+rapidocr_onnxruntime
+ultralytics
+openpyxl
+redis
+onnxruntime
+opencv-python-headless
+wordsegment
+pandas
+gTTS
+chromadb

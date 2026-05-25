@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title data-i18n="dash.title">Bảng điều khiển</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/themify-icons@1.0.1/css/themify-icons.css">
+  <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+
+<body class="app">
+  <!-- @TOC -->
+  <!-- =================================================== -->
+  <!--
+      + @Page Loader
+      + @App Content
+          - #Left Sidebar
+              > $Sidebar Header
+              > $Sidebar Menu
+
+          - #Main
+              > $Topbar
+              > $App Screen Content
+    -->
+
+  <!-- @Page Loader -->
+  <!-- =================================================== -->
+  <div id='loader'>
+    <div class="spinner"></div>
+  </div>
+
+  <script src="/static/js/i18n.js?v=3"></script>
+  <script src="/static/js/dashboard.js?v=3"></script>
+  <script>
+    // Fetch và apply ngôn ngữ ngay khi DOM sẵn sàng
+    document.addEventListener("DOMContentLoaded", () => {
+      window.I18N.fetchAndApply();
+    });
+  </script>
+
+  <!-- @App Content -->
+  <!-- =================================================== -->
+  <div>
+    <!-- #Left Sidebar ==================== -->
+    <div class="sidebar">
+      <div class="sidebar-inner">
+        <!-- ### $Sidebar Header ### -->
+        <div class="sidebar-logo">
+          <div class="peers ai-c fxw-nw">
+            <div class="peer peer-greed">
+              <a class="sidebar-link td-n">
+                <div class="peers ai-c fxw-nw">
+                  <div class="peer">
+                    <div class="logo">
+                      <i class="ti-dashboard dashboard-logo-icon" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                  <div class="peer peer-greed">
+                    <h5 class="lh-1 mB-0 logo-text">DASHBOARD</h5>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="peer">
+            </div>
+          </div>
+        </div>
+
+        <!-- ### $Sidebar Menu ### -->
+        <ul class="sidebar-menu scrollable pos-r">
+          <li class="nav-item">
+            <a class="sidebar-link" href="javascript:void(0);" data-screen-target="database">
+              <span class="icon-holder">
+                <i class="c-blue-500 ti-agenda"></i>
+              </span>
+              <span class="title" data-i18n="dash.menu.database">Thông tin khách hàng</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="sidebar-link" href="javascript:void(0);" data-screen-target="cccd">
+              <span class="icon-holder">
+                <i class="c-blue-500 ti-user"></i>
+              </span>
+              <span class="title" data-i18n="dash.menu.cccd">Căn cước công dân</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="sidebar-link" href="javascript:void(0);" data-screen-target="appointments">
+              <span class="icon-holder">
+                <i class="c-blue-500 ti-calendar"></i>
+              </span>
+              <span class="title" data-i18n="dash.menu.appointments">Đặt lịch</span>
+            </a>
+          </li>
+          <li class="nav-item nav-item-qa">
+            <a class="sidebar-link sidebar-link-qa" href="javascript:void(0);" data-screen-target="qa">
+              <span class="icon-holder icon-holder-qa">
+                <i class="c-blue-500 ti-help-alt"></i>
+              </span>
+              <span class="title" data-i18n="dash.menu.qa">Q&amp;A</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="sidebar-link" href="javascript:void(0);" data-screen-target="settings">
+              <span class="icon-holder">
+                <i class="c-blue-500 ti-settings"></i>
+              </span>
+              <span class="title" data-i18n="dash.menu.settings">Cài đặt</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- #Main ============================ -->
+    <div class="page-container">
+      <!-- ### $Topbar ### -->
+      <div class="header navbar">
+        <div class="header-container">
+          <ul class="nav-left">
+            <li>
+              <a id='sidebar-toggle' class="sidebar-toggle" href="javascript:void(0);">
+                <i class="ti-menu"></i>
+              </a>
+            </li>
+            <li class="search-input">
+              <input id="globalSearchInput" class="form-control" type="text" 
+                data-i18n="dash.search.placeholder" data-i18n-attr="placeholder"
+                placeholder="Tìm theo tên hoặc công ty">
+            </li>
+          </ul>
+          <ul class="nav-right">
+            <li class="notifications dropdown">
+              <span id="notifCounter" class="counter bgc-red">0</span>
+              <a href="javascript:void(0);" class="dropdown-toggle no-after" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="ti-bell"></i>
+              </a>
+
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li class="pX-20 pY-15 bdB">
+                  <i class="ti-bell pR-10"></i>
+                  <span class="fsz-sm fw-600 c-grey-900" data-i18n="dash.notifications">Thông báo</span>
+                </li>
+                <li>
+                  <ul id="notificationList" class="ovY-a pos-r scrollable lis-n p-0 m-0 fsz-sm">
+                    <li id="notificationEmpty">
+                      <a href="javascript:void(0);" class='peers fxw-nw td-n p-20 bdB c-grey-800'>
+                        <div class="peer peer-greed">
+                          <span class="c-grey-600" data-i18n="dash.notif.empty">Chưa có đăng ký mới.</span>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li id="notificationMeta" class="notification-meta" style="display:none;"></li>
+              </ul>
+            </li>
+            <li class="dropdown user-menu">
+              <a class="dropdown-toggle user-menu-toggle no-after peers fxw-nw ai-c lh-1" data-bs-toggle="dropdown">
+                <div class="peer mR-10">
+                </div>
+                <div class="peer">
+                  <span class="fsz-sm c-grey-900">{{ (current_user.display_name if current_user else '') or
+                    (current_user.username if current_user else window.I18N.t('dash.user.default')) }}</span>
+                </div>
+              </a>
+              <ul class="dropdown-menu fsz-sm">
+                <li>
+                  <a id="logoutBtn" href="javascript:void(0);" class="d-b td-n pY-5 bgcH-grey-100 c-grey-700">
+                    <i class="ti-power-off mR-10"></i>
+                    <span data-i18n="dash.logout">Đăng xuất</span>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ### $App Screen Content ### -->
+      <main class='main-content bgc-grey-100'>
+        <div id='mainContent'>
+          <section class="app-screen" data-screen="database">
+            <div class="row gap-20 masonry pos-r">
+              <div class="masonry-item col-12">
+                <div class="bd bgc-white">
+                  <div class="layers">
+                    <div class="layer w-100 pX-20 pY-15 bdB">
+                      <div class="result-toolbar">
+                        <h6 class="lh-1 mB-0"></h6>
+                        <div class="result-toolbar-actions">
+                          <button id="bulkDeleteBtn" class="btn-export btn-delete-bulk" type="button" hidden data-i18n="dash.btn.delete">Xóa</button>
+                          <button id="exportJsonlBtn" class="btn-export" type="button" data-i18n="dash.btn.export.jsonl">Xuất JSONL</button>
+                          <button id="exportExcelBtn" class="btn-export" type="button" data-i18n="dash.btn.export.excel">Xuất Excel</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="layer w-100">
+                      <div class="database-layout pX-20 pY-15">
+                        <div class="database-layout-full">
+                          <div class="dashboard-stats-row">
+                            <div class="dashboard-stat-card">
+                              <p class="dashboard-stat-label" data-i18n="dash.stat.total">Tổng lượt khách</p>
+                              <p class="dashboard-stat-value" id="statTotal">0</p>
+                            </div>
+                            <div class="dashboard-stat-card">
+                              <p class="dashboard-stat-label" data-i18n="dash.stat.today">Đăng ký hôm nay</p>
+                              <p class="dashboard-stat-value" id="statToday">0</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="database-layout-row">
+                          <div class="database-layout-main">
+                            <div class="table-responsive">
+                              <div class="table-scroll-area">
+                                <table id="databaseTable" class="table table-hover mB-0">
+                                  <colgroup>
+                                    <col style="width:52px;">
+                                    <col style="width:140px;">
+                                    <col style="width:140px;">
+                                    <col style="width:140px;">
+                                    <col style="width:140px;">
+                                    <col style="width:140px;">
+                                    <col style="width:140px;">
+                                  </colgroup>
+                                  <thead>
+                                    <tr>
+                                      <th class="row-selector-head">
+                                        <input id="databaseSelectAll" type="checkbox" 
+                                          data-i18n="dash.table.select.all" data-i18n-attr="aria-label"
+                                          aria-label="Chọn tất cả các dòng">
+                                      </th>
+                                      <th data-i18n="dash.table.name">Họ tên</th>
+                                      <th data-i18n="dash.table.company">Công ty</th>
+                                      <th data-i18n="dash.table.email">Email</th>
+                                      <th data-i18n="dash.table.phone">Điện thoại</th>
+                                      <th data-i18n="dash.table.time">Thời gian đăng ký</th>
+                                      <th data-i18n="dash.table.actions">Thao tác</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody id="databaseTableBody">
+                                    <tr id="databaseEmptyRow" class="empty-search-row">
+                                      <td colspan="7" data-i18n="dash.table.empty">Không có dữ liệu phù hợp.</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div class="result-toolbar mT-15">
+                                <div class="result-toolbar-actions">
+                                  <button id="databasePrevBtn" class="btn-export" type="button" data-i18n="dash.btn.prev">Trang trước</button>
+                                  <span id="databasePageInfo" class="mX-10">Trang 1 / 1</span>
+                                  <button id="databaseNextBtn" class="btn-export" type="button" data-i18n="dash.btn.next">Trang sau</button>
+                                </div>
+                                <label class="database-filter-toggle" for="databaseMissingOnlyToggle">
+                                  <input id="databaseMissingOnlyToggle" type="checkbox">
+                                  <span data-i18n="dash.filter.missing">Chỉ hiện mục cần kiểm tra</span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+
+                          <aside class="guest-detail-panel">
+                            <div class="guest-detail-head">
+                              <span class="guest-radio" id="detailDot"></span>
+                              <strong id="detailName" data-i18n="dash.detail.select">Chọn khách</strong>
+                            </div>
+
+                            <div class="guest-detail-card">
+                              <h6 data-i18n="dash.detail.info">Thông tin</h6>
+                              <p id="detailInfo" data-i18n="dash.detail.info.empty">Nhấp vào một dòng trong danh sách để xem chi tiết.</p>
+                            </div>
+
+                            <div id="detailImageCard" class="guest-detail-card">
+                              <h6 data-i18n="dash.detail.images">Hình ảnh</h6>
+                              <div id="detailImageGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                                <figure style="margin:0;">
+                                  <figcaption style="font-size:12px;color:#475569;margin-bottom:6px;" data-i18n="dash.detail.face">Khuôn mặt</figcaption>
+                                  <img id="detailFaceImg" alt="Ảnh khuôn mặt" data-i18n="preview.face.alt" data-i18n-attr="alt" style="width:100%;height:120px;object-fit:contain;border:1px solid #e2e8f0;display:none;background:#f8fafc;cursor:zoom-in;" />
+                                </figure>
+                                <figure style="margin:0;">
+                                  <figcaption style="font-size:12px;color:#475569;margin-bottom:6px;" data-i18n="dash.detail.card">Danh thiếp</figcaption>
+                                  <img id="detailBcardImg" alt="Ảnh danh thiếp" data-i18n="preview.card.alt" data-i18n-attr="alt" style="width:100%;height:120px;object-fit:contain;border:1px solid #e2e8f0;display:none;background:#f8fafc;cursor:zoom-in;" />
+                                </figure>
+                              </div>
+                              <p id="detailImageEmpty" style="margin-top:8px;" data-i18n="dash.detail.images.empty">Không có hình ảnh.</p>
+                            </div>
+
+                            <div class="guest-detail-card">
+                              <h6 data-i18n="dash.detail.activity">Hoạt động gần đây</h6>
+                              <p id="detailActivity">-</p>
+                            </div>
+                          </aside>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="app-screen" data-screen="cccd">
+            <div class="row gap-20 masonry pos-r">
+              <div class="masonry-item col-12">
+                <div class="bd bgc-white">
+                  <div class="layers">
+                    <div class="layer w-100 pX-20 pY-15 bdB">
+                      <div class="result-toolbar">
+                        <div>
+                          <!-- <h6 class="lh-1 mB-0">Căn cước công dân</h6> -->
+                          <!-- <p class="cccd-subtitle">Chỉ hiển thị hồ sơ căn cước công dân</p> -->
+                        </div>
+                        <div class="result-toolbar-actions">
+                          <button id="cccdBulkDeleteBtn" class="btn-export btn-delete-bulk" type="button" hidden data-i18n="dash.btn.delete">Xóa</button>
+                          <button id="cccdExportJsonBtn" class="btn-export" type="button" data-i18n="dash.btn.export.json">Xuất JSON</button>
+                          <button id="cccdExportExcelBtn" class="btn-export" type="button" data-i18n="dash.btn.export.excel">Xuất Excel</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="layer w-100">
+                      <div class="database-layout pX-20 pY-15">
+                        <div class="database-layout-full">
+                          <div class="dashboard-stats-row">
+                            <div class="dashboard-stat-card">
+                              <p class="dashboard-stat-label" data-i18n="dash.stat.total">Tổng lượt khách</p>
+                              <p class="dashboard-stat-value" id="cccdStatTotal">0</p>
+                            </div>
+                            <div class="dashboard-stat-card">
+                              <p class="dashboard-stat-label" data-i18n="dash.stat.today">Đăng ký hôm nay</p>
+                              <p class="dashboard-stat-value" id="cccdStatToday">0</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="database-layout-row">
+                          <div class="database-layout-main">
+                            <div class="table-responsive">
+                              <div class="table-scroll-area">
+                                <table id="cccdTable" class="table table-hover mB-0">
+                                  <colgroup>
+                                    <col style="width:52px;">
+                                    <col style="width:180px;">
+                                    <col style="width:170px;">
+                                    <col style="width:110px;">
+                                    <col style="width:170px;">
+                                    <col style="width:220px;">
+                                    <col style="width:170px;">
+                                    <col style="width:140px;">
+                                  </colgroup>
+                                  <thead>
+                                    <tr>
+                                      <th class="row-selector-head">
+                                        <input id="cccdSelectAll" type="checkbox" 
+                                          data-i18n="dash.cccd.select.all" data-i18n-attr="aria-label"
+                                          aria-label="Chọn tất cả dòng CCCD">
+                                      </th>
+                                      <th data-i18n="dash.table.name">Họ tên</th>
+                                      <th data-i18n="dash.cccd.id.number">Số CCCD</th>
+                                      <th data-i18n="dash.cccd.gender">Giới tính</th>
+                                      <th data-i18n="dash.cccd.dob">Ngày sinh</th>
+                                      <th data-i18n="dash.cccd.address">Nơi thường trú</th>
+                                      <th data-i18n="dash.cccd.created">Ngày tạo</th>
+                                      <th data-i18n="dash.table.actions">Thao tác</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody id="cccdTableBody">
+                                    <tr id="cccdEmptyRow" class="empty-search-row">
+                                      <td colspan="8" data-i18n="dash.cccd.empty">Không tìm thấy hồ sơ CCCD nào.</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div class="result-toolbar mT-15">
+                                <div class="result-toolbar-actions">
+                                  <button id="cccdPrevBtn" class="btn-export" type="button" data-i18n="dash.btn.prev">Trang trước</button>
+                                  <span id="cccdPageInfo" class="mX-10">Trang 1 / 1</span>
+                                  <button id="cccdNextBtn" class="btn-export" type="button" data-i18n="dash.btn.next">Trang sau</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <aside class="guest-detail-panel" id="cccdDetailPanel">
+                            <div class="guest-detail-head">
+                              <span class="guest-radio" id="cccdDetailDot"></span>
+                              <strong id="cccdDetailName" data-i18n="dash.detail.select">Chọn khách</strong>
+                            </div>
+
+                            <div class="guest-detail-card">
+                              <h6 data-i18n="dash.cccd.info.title">THÔNG TIN CĂN CƯỚC CÔNG DÂN</h6>
+                              <p id="cccdDetailInfo" data-i18n="dash.cccd.info.empty">Chọn một dòng CCCD để xem chi tiết.</p>
+                            </div>
+
+                            <div class="guest-detail-card">
+                              <h6 data-i18n="dash.detail.images">Hình ảnh</h6>
+                              <div class="detail-image-grid detail-image-grid-cccd">
+                                <figure style="margin:0;">
+                                  <figcaption class="detail-figcaption" data-i18n="dash.detail.face">Khuôn mặt</figcaption>
+                                  <img id="cccdDetailFaceImg" alt="Ảnh khuôn mặt" data-i18n="preview.face.alt" data-i18n-attr="alt" class="detail-preview-image" />
+                                </figure>
+                                <figure style="margin:0;">
+                                  <figcaption class="detail-figcaption" data-i18n="dash.detail.cccd">CCCD</figcaption>
+                                  <img id="cccdDetailFrontImg" alt="Ảnh căn cước công dân" data-i18n="dash.cccd.front.alt" data-i18n-attr="alt" class="detail-preview-image" />
+                                </figure>
+                              </div>
+                              <p id="cccdDetailImageEmpty" style="margin-top:8px;" data-i18n="dash.detail.images.empty">Không có hình ảnh.</p>
+                            </div>
+
+                            <div class="guest-detail-card">
+                              <h6 data-i18n="dash.detail.activity">Hoạt động gần đây</h6>
+                              <p id="cccdDetailActivity">-</p>
+                            </div>
+
+                            <div class="guest-detail-card">
+                              <h6 data-i18n="dash.detail.raw.text">Văn bản OCR gốc</h6>
+                              <pre id="cccdDetailRawText" class="detail-pre">-</pre>
+                            </div>
+                          </aside>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="app-screen" data-screen="appointments">
+            <div class="row gap-20 masonry pos-r">
+              <div class="masonry-item col-12">
+                <div class="bd bgc-white">
+                  <div class="layers">
+                    <div class="layer w-100 pX-20 pY-15 bdB">
+	                      <div class="result-toolbar">
+	                        <div class="result-toolbar-actions">
+	                          <button id="appointmentPrevMonthBtn" class="btn-export" type="button" data-i18n="dash.appt.btn.prev.month">Tháng trước</button>
+	                          <button id="appointmentTodayBtn" class="btn-export" type="button" data-i18n="dash.appt.btn.today">Hôm nay</button>
+	                          <button id="appointmentNextMonthBtn" class="btn-export" type="button" data-i18n="dash.appt.btn.next.month">Tháng sau</button>
+	                        </div>
+	                        <button id="appointmentFilterApplyBtn" class="btn-export" type="button" data-i18n="dash.appt.btn.filter">Lọc lịch hẹn</button>
+	                      </div>
+                    </div>
+                    <div class="layer w-100">
+                      <div class="appointments-layout pX-20 pY-15">
+                        <div class="appointments-calendar-card">
+                          <div class="appointments-calendar-head">
+                            <div>
+                              <h6 id="appointmentMonthLabel" class="lh-1 mB-0" data-i18n="dash.appt.month">Tháng</h6>
+                              <p id="appointmentMonthMeta" class="cccd-subtitle">0 cuộc hẹn</p>
+                            </div>
+                          </div>
+                          <div class="appointments-weekdays">
+                            <span data-i18n="dash.appt.weekdays.mon">T2</span>
+                            <span data-i18n="dash.appt.weekdays.tue">T3</span>
+                            <span data-i18n="dash.appt.weekdays.wed">T4</span>
+                            <span data-i18n="dash.appt.weekdays.thu">T5</span>
+                            <span data-i18n="dash.appt.weekdays.fri">T6</span>
+                            <span data-i18n="dash.appt.weekdays.sat">T7</span>
+                            <span data-i18n="dash.appt.weekdays.sun">CN</span>
+                          </div>
+                          <div id="appointmentsCalendarGrid" class="appointments-calendar-grid"></div>
+                        </div>
+
+                        <aside class="appointments-detail-panel">
+                          <div class="guest-detail-head">
+                            <span class="guest-radio active"></span>
+                            <strong id="appointmentSelectedDateLabel" data-i18n="dash.appt.select.date">Chọn ngày</strong>
+                          </div>
+
+                          <div id="appointmentStatusMessage" class="settings-status" hidden></div>
+
+                          <div class="guest-detail-card">
+                            <h6 data-i18n="dash.appt.day.schedule">Lịch trong ngày</h6>
+                            <div id="appointmentEmptyState" class="appointments-empty" data-i18n="dash.appt.day.empty">Không có lịch hẹn nào.</div>
+                            <div id="appointmentDayList" class="appointments-day-list"></div>
+                          </div>
+                        </aside>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="app-screen" data-screen="settings">
+            <div class="row gap-20 masonry pos-r">
+              <div class="masonry-item col-12">
+                <div class="bd bgc-white">
+                  <div class="layers">
+                    <div class="layer w-100 pX-20 pY-15 bdB">
+                      <div class="result-toolbar">
+                        <div>
+                          <!-- <h6 class="lh-1 mB-0">Cài đặt hệ thống</h6> -->
+                          <!-- <p class="cccd-subtitle">Bật tắt nhanh chức năng đang lấy từ file .env</p> -->
+                        </div>
+                      </div>
+                    </div>
+                    <div class="layer w-100">
+                      <div class="settings-layout pX-20 pY-15">
+                        <div id="settingsStatusMessage" class="settings-status" hidden></div>
+
+                        <div class="settings-card">
+                          <div class="settings-card-copy">
+                            <h6 data-i18n="dash.settings.qr.print">Máy in QR</h6>
+                          </div>
+                          <label class="settings-switch" for="qrPrintEnabledToggle">
+                            <input id="qrPrintEnabledToggle" type="checkbox">
+                            <span class="settings-slider"></span>
+                          </label>
+                        </div>
+
+                        <div class="settings-card">
+                          <div class="settings-card-copy">
+                            <h6 data-i18n="dash.settings.face.recog">Nhận diện khuôn mặt</h6>
+                          </div>
+                          <label class="settings-switch" for="faceRecognitionToggle">
+                            <input id="faceRecognitionToggle" type="checkbox">
+                            <span class="settings-slider"></span>
+                          </label>
+                        </div>
+
+                        <div class="settings-card">
+                          <div class="settings-card-copy">
+                            <h6 data-i18n="dash.settings.appointment">Đặt lịch</h6>
+                          </div>
+                          <label class="settings-switch" for="appointmentOverlayToggle">
+                            <input id="appointmentOverlayToggle" type="checkbox">
+                            <span class="settings-slider"></span>
+                          </label>
+                        </div>
+
+                        <div class="settings-card" style="border-top: 2px solid #e2e8f0; margin-top: 8px; padding-top: 8px;">
+                          <div class="settings-card-copy">
+                            <h6 data-i18n="dash.settings.japanese">🇯🇵 Tiếng Nhật</h6>
+                            <p style="font-size:12px;color:#64748b;margin:2px 0 0;" data-i18n="dash.settings.japanese.desc">Chuyển toàn bộ giao diện kiosk &amp; Q&amp;A sang tiếng Nhật</p>
+                          </div>
+                          <label class="settings-switch" for="japaneseModeToggle">
+                            <input id="japaneseModeToggle" type="checkbox">
+                            <span class="settings-slider"></span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="app-screen" data-screen="qa">
+            <div class="row gap-20 masonry pos-r">
+              <div class="masonry-item col-12">
+                <div class="bd bgc-white">
+                  <div class="layers">
+                    <div class="layer w-100 pX-20 pY-15 bdB">
+                      <div class="result-toolbar">
+                        <div>
+                          <h6 class="lh-1 mB-0" data-i18n="dash.qa.title">Lịch sử Q&amp;A</h6>
+                        </div>
+                        <div class="result-toolbar-actions">
+                          <button id="qaHistoryDeleteAllBtn" class="btn-export btn-delete-bulk" type="button" data-i18n="dash.qa.btn.delete.all">Xóa toàn bộ</button>
+                          <a class="btn-export" href="/qa-voice-demo" target="_blank" rel="noopener noreferrer" data-i18n="dash.qa.btn.open">Mở giao diện QA</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="layer w-100">
+                      <div class="qa-dashboard-layout pX-20 pY-15">
+                        <div class="qa-history-panel">
+                          <div class="guest-detail-head">
+                            <span class="guest-radio active"></span>
+                            <strong id="qaHistoryCountLabel">0 phiên hỏi đáp</strong>
+                          </div>
+                          <div id="qaHistoryStatusMessage" class="settings-status" hidden></div>
+                          <div id="qaHistoryEmptyState" class="appointments-empty" data-i18n="dash.qa.empty">Chưa có phiên Q&amp;A nào.</div>
+                          <div id="qaHistoryList" class="qa-history-list"></div>
+                        </div>
+
+                        <aside class="qa-detail-panel">
+                          <div class="guest-detail-head">
+                            <span class="guest-radio" id="qaDetailDot"></span>
+                            <strong id="qaDetailTitle" data-i18n="dash.qa.select">Chọn một phiên Q&amp;A</strong>
+                          </div>
+
+                          <div class="guest-detail-card">
+                            <h6 data-i18n="dash.qa.detail.info">Thông tin</h6>
+                            <p id="qaDetailMeta" data-i18n="dash.qa.detail.info.empty">Nhấp vào một bản ghi để xem toàn bộ hội thoại.</p>
+                          </div>
+
+                          <div class="guest-detail-card">
+                            <h6 data-i18n="dash.qa.detail.question">Câu hỏi</h6>
+                            <p id="qaDetailQuestion">-</p>
+                          </div>
+
+                          <div class="guest-detail-card">
+                            <h6 data-i18n="dash.qa.detail.answer">Câu trả lời</h6>
+                            <p id="qaDetailAnswer">-</p>
+                          </div>
+
+                          <div class="result-toolbar">
+                            <button id="qaDetailDeleteBtn" class="btn-export btn-delete-bulk" type="button" disabled data-i18n="dash.qa.detail.delete">Xóa lượt chat này</button>
+                          </div>
+
+                          <div class="guest-detail-card">
+                            <h6 data-i18n="dash.qa.detail.sources">Nguồn áp dụng</h6>
+                            <div id="qaDetailSources" class="qa-detail-sources">-</div>
+                          </div>
+                        </aside>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+
+    </div>
+  </div>
+
+  <div id="editModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+      <div class="modal-header">
+        <h6 id="editModalTitle" data-i18n="dash.modal.edit.title">Chỉnh sửa</h6>
+        <button id="editCloseBtn" type="button" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-field">
+          <label for="editFullName" data-i18n="dash.modal.edit.name">Họ tên</label>
+          <input id="editFullName" type="text" />
+        </div>
+        <div class="modal-field">
+          <label for="editCompany" data-i18n="dash.modal.edit.company">Công ty</label>
+          <input id="editCompany" type="text" />
+        </div>
+        <div class="modal-field">
+          <label for="editEmail" data-i18n="dash.modal.edit.email">Email</label>
+          <input id="editEmail" type="email" />
+        </div>
+        <div class="modal-field">
+          <label for="editPhone" data-i18n="dash.modal.edit.phone">Điện thoại</label>
+          <input id="editPhone" type="text" />
+        </div>
+        <div class="modal-field">
+          <label for="editTitle" data-i18n="dash.modal.edit.title.field">Chức vụ</label>
+          <input id="editTitle" type="text" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="editConfirmBtn" type="button" class="modal-btn modal-btn-primary" data-i18n="btn.confirm">Xác nhận</button>
+        <button id="editCancelBtn" type="button" class="modal-btn modal-btn-secondary" data-i18n="btn.cancel">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirmModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-card modal-card-sm" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+      <div class="modal-header">
+        <h6 id="confirmModalTitle" data-i18n="dash.modal.confirm.title">Xác nhận</h6>
+        <button type="button" class="modal-close" data-modal-close>&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="confirmModalMessage" data-i18n="dash.modal.confirm.msg">Bạn có chắc không?</p>
+      </div>
+      <div class="modal-actions">
+        <button id="confirmYesBtn" type="button" class="modal-btn modal-btn-primary" data-i18n="btn.confirm">Xác nhận</button>
+        <button id="confirmNoBtn" type="button" class="modal-btn modal-btn-secondary" data-i18n="btn.cancel">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="exportModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-card modal-card-sm" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
+      <div class="modal-header">
+        <h6 id="exportModalTitle" data-i18n="dash.modal.export.title">Xuất dữ liệu</h6>
+        <button id="exportCloseBtn" type="button" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-field">
+          <label for="exportDateFrom" data-i18n="dash.modal.export.from">Từ ngày</label>
+          <input id="exportDateFrom" type="date" />
+        </div>
+        <div class="modal-field">
+          <label for="exportDateTo" data-i18n="dash.modal.export.to">Đến ngày</label>
+          <input id="exportDateTo" type="date" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="exportConfirmBtn" type="button" class="modal-btn modal-btn-primary" data-i18n="btn.confirm">Xác nhận</button>
+        <button id="exportCancelBtn" type="button" class="modal-btn modal-btn-secondary" data-i18n="btn.cancel">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="appointmentFilterModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-card appointment-filter-modal-card" role="dialog" aria-modal="true" aria-labelledby="appointmentFilterModalTitle">
+      <div class="modal-header appointment-filter-modal-header">
+        <h6 id="appointmentFilterModalTitle" class="appointment-filter-modal-title" data-i18n="dash.modal.appt.filter.title">Lọc lịch</h6>
+        <button id="appointmentFilterCloseBtn" type="button" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body appointment-filter-modal-body">
+        <div class="appointment-filter-modal-top">
+          <p id="appointmentFilterMonthHint" class="appointment-filter-month-hint" data-i18n="dash.modal.appt.filter.hint">Danh sách lịch hẹn theo tháng đang chọn</p>
+          <div class="appointments-filter-row appointments-filter-row-modal">
+            <select id="appointmentStatusFilter" class="appointment-filter-select">
+              <option value="" data-i18n="dash.modal.appt.filter.status.all">Tất cả trạng thái</option>
+              <option value="pending" data-i18n="dash.modal.appt.filter.status.pending">Chờ xác nhận</option>
+              <option value="confirmed" data-i18n="dash.modal.appt.filter.status.confirmed">Đã xác nhận</option>
+              <option value="done" data-i18n="dash.modal.appt.filter.status.done">Đã hoàn tất</option>
+              <option value="cancelled" data-i18n="dash.modal.appt.filter.status.cancelled">Đã hủy</option>
+              <option value="no_show" data-i18n="dash.modal.appt.filter.status.no_show">Không đến</option>
+            </select>
+            <input id="appointmentAssigneeFilter" class="appointment-filter-input" type="text" 
+              data-i18n="dash.modal.appt.filter.assignee" data-i18n-attr="placeholder"
+              placeholder="Lọc theo người phụ trách" />
+            <button id="appointmentFilterModalSubmitBtn" class="btn-export" type="button" data-i18n="dash.modal.appt.filter.btn">Lọc</button>
+          </div>
+        </div>
+        <div id="appointmentFilterList" class="appointment-filter-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="appointmentDetailModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-card modal-card-sm" role="dialog" aria-modal="true" aria-labelledby="appointmentDetailModalTitle">
+      <div class="modal-header">
+        <h6 id="appointmentDetailModalTitle" data-i18n="dash.modal.appt.detail.title">Chi tiết lịch hẹn</h6>
+        <button id="appointmentDetailCloseBtn" type="button" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="appointment-detail-grid">
+          <div class="appointment-detail-row">
+            <span data-i18n="dash.modal.appt.detail.date">Ngày hẹn</span>
+            <strong id="appointmentDetailDate">-</strong>
+          </div>
+          <div class="appointment-detail-row">
+            <span data-i18n="dash.modal.appt.detail.time">Giờ hẹn</span>
+            <strong id="appointmentDetailTime">-</strong>
+          </div>
+          <div class="appointment-detail-row">
+            <span data-i18n="dash.modal.appt.detail.contact">Khách đặt lịch</span>
+            <strong id="appointmentDetailContact">-</strong>
+          </div>
+          <div class="appointment-detail-row">
+            <span data-i18n="dash.modal.appt.detail.status">Trạng thái</span>
+            <strong id="appointmentDetailStatus">-</strong>
+          </div>
+          <div class="appointment-detail-row">
+            <span data-i18n="dash.modal.appt.detail.assignee">Người phụ trách</span>
+            <strong id="appointmentDetailAssignee">-</strong>
+          </div>
+          <div class="appointment-detail-row">
+            <span data-i18n="dash.modal.appt.detail.reason">Lý do hẹn</span>
+            <strong id="appointmentDetailReason">-</strong>
+          </div>
+          <div class="appointment-detail-row appointment-detail-row-block">
+            <span data-i18n="dash.modal.appt.detail.notes">Ghi chú</span>
+            <strong id="appointmentDetailDescription">-</strong>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="appointmentDetailDismissBtn" type="button" class="modal-btn modal-btn-secondary" data-i18n="btn.close">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="appointmentEditModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="appointmentEditModalTitle">
+      <div class="modal-header">
+        <h6 id="appointmentEditModalTitle" data-i18n="dash.modal.appt.edit.title">Chỉnh sửa lịch hẹn</h6>
+        <button id="appointmentEditCloseBtn" type="button" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-field">
+          <div class="modal-label-row">
+            <label for="appointmentEditDate" data-i18n="dash.modal.appt.edit.date">Ngày hẹn</label>
+            <span id="appointmentEditDateError" class="modal-inline-error" hidden></span>
+          </div>
+          <div id="appointmentEditDateShell" class="modal-picker-shell">
+            <input id="appointmentEditDate" type="date" />
+          </div>
+        </div>
+        <div class="modal-field">
+          <div class="modal-label-row">
+            <label for="appointmentEditStart" data-i18n="dash.modal.appt.edit.start">Giờ bắt đầu</label>
+            <span id="appointmentEditStartError" class="modal-inline-error" hidden></span>
+          </div>
+          <div id="appointmentEditStartShell" class="modal-picker-shell modal-time-shell">
+            <input id="appointmentEditStart" type="hidden" />
+            <div class="modal-time-select-group">
+              <select id="appointmentEditStartHour" class="modal-time-part-select" 
+                data-i18n="dash.modal.appt.edit.start" data-i18n-attr="aria-label"
+                aria-label="Giờ bắt đầu">
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+              </select>
+              <span class="modal-time-separator">:</span>
+              <select id="appointmentEditStartMinute" class="modal-time-part-select" aria-label="Phút bắt đầu" data-i18n="dash.modal.appt.edit.start.minute" data-i18n-attr="aria-label">
+                <option value="00">00</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-field">
+          <div class="modal-label-row">
+            <label for="appointmentEditEnd" data-i18n="dash.modal.appt.edit.end">Giờ kết thúc</label>
+            <span id="appointmentEditEndError" class="modal-inline-error" hidden></span>
+          </div>
+          <div id="appointmentEditEndShell" class="modal-picker-shell modal-time-shell">
+            <input id="appointmentEditEnd" type="hidden" />
+            <div class="modal-time-select-group">
+              <select id="appointmentEditEndHour" class="modal-time-part-select" 
+                data-i18n="dash.modal.appt.edit.end" data-i18n-attr="aria-label"
+                aria-label="Giờ kết thúc">
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+              </select>
+              <span class="modal-time-separator">:</span>
+              <select id="appointmentEditEndMinute" class="modal-time-part-select" aria-label="Phút kết thúc" data-i18n="dash.modal.appt.edit.end.minute" data-i18n-attr="aria-label">
+                <option value="00">00</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-field">
+          <label for="appointmentEditContact" data-i18n="dash.modal.appt.edit.name">Họ tên</label>
+          <input id="appointmentEditContact" type="text" />
+        </div>
+        <div class="modal-field">
+          <label for="appointmentEditPurpose" data-i18n="dash.modal.appt.edit.purpose">Lý do hẹn</label>
+          <input id="appointmentEditPurpose" type="text" />
+        </div>
+        <div class="modal-field">
+          <label for="appointmentEditDescription" data-i18n="dash.modal.appt.edit.notes">Ghi chú</label>
+          <textarea id="appointmentEditDescription" rows="4"></textarea>
+        </div>
+        <div class="modal-field">
+          <label for="appointmentEditAssignee" data-i18n="dash.modal.appt.edit.assignee">Người phụ trách</label>
+          <input id="appointmentEditAssignee" type="text" 
+            data-i18n="dash.modal.appt.edit.assignee.placeholder" data-i18n-attr="placeholder"
+            placeholder="VD: Nguyễn Văn A" />
+        </div>
+        <div class="modal-field">
+          <label for="appointmentEditStatus" data-i18n="dash.modal.appt.edit.status">Trạng thái</label>
+          <select id="appointmentEditStatus">
+            <option value="pending" data-i18n="dash.modal.appt.filter.status.pending">Chờ xác nhận</option>
+            <option value="confirmed" data-i18n="dash.modal.appt.filter.status.confirmed">Đã xác nhận</option>
+            <option value="done" data-i18n="dash.modal.appt.filter.status.done">Đã hoàn tất</option>
+            <option value="cancelled" data-i18n="dash.modal.appt.filter.status.cancelled">Đã hủy</option>
+            <option value="no_show" data-i18n="dash.modal.appt.filter.status.no_show">Không đến</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="appointmentEditConfirmBtn" type="button" class="modal-btn modal-btn-primary" data-i18n="dash.modal.appt.edit.save">Lưu</button>
+        <button id="appointmentEditCancelBtn" type="button" class="modal-btn modal-btn-secondary" data-i18n="btn.cancel">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cccdEditModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="cccdEditModalTitle">
+      <div class="modal-header">
+        <h6 id="cccdEditModalTitle" data-i18n="dash.modal.cccd.edit.title">Chỉnh sửa CCCD</h6>
+        <button id="cccdEditCloseBtn" type="button" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-field">
+          <label for="cccdEditFullName" data-i18n="dash.modal.cccd.edit.name">Họ tên</label>
+          <input id="cccdEditFullName" type="text" />
+        </div>
+        <div class="modal-field">
+          <label for="cccdEditIdNumber" data-i18n="dash.modal.cccd.edit.id">Số CCCD</label>
+          <input id="cccdEditIdNumber" type="text" />
+        </div>
+        <div class="modal-field">
+          <label for="cccdEditGender" data-i18n="dash.modal.cccd.edit.gender">Giới tính</label>
+          <input id="cccdEditGender" type="text" />
+        </div>
+        <div class="modal-field">
+          <label for="cccdEditDob" data-i18n="dash.modal.cccd.edit.dob">Ngày sinh</label>
+          <input id="cccdEditDob" type="text" />
+        </div>
+        <div class="modal-field">
+          <label for="cccdEditAddress" data-i18n="dash.modal.cccd.edit.address">Nơi thường trú</label>
+          <input id="cccdEditAddress" type="text" />
+        </div>
+        <div class="modal-field">
+          <label for="cccdEditIssued" data-i18n="dash.modal.cccd.edit.issued">Ngày cấp</label>
+          <input id="cccdEditIssued" type="text" />
+        </div>
+        <div class="modal-field">
+          <label for="cccdEditExpiry" data-i18n="dash.modal.cccd.edit.expiry">Ngày hết hạn</label>
+          <input id="cccdEditExpiry" type="text" />
+        </div>
+        <div class="modal-field">
+          <label for="cccdEditOldId" data-i18n="dash.modal.cccd.edit.old.id">Số CMND cũ</label>
+          <input id="cccdEditOldId" type="text" />
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="cccdEditConfirmBtn" type="button" class="modal-btn modal-btn-primary" data-i18n="btn.confirm">Xác nhận</button>
+        <button id="cccdEditCancelBtn" type="button" class="modal-btn modal-btn-secondary" data-i18n="btn.cancel">Hủy</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
